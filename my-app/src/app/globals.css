@@ -2,20 +2,14 @@
 @tailwind components;
 @tailwind utilities;
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
+@layer components {
+  /* common design start here */
+  /* common desing ended here */
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+  /* login page design start here */
+  .login-form {
+    @apply items-center border bg-white rounded-[1px] border-solid border-gray flex flex-col h-auto w-80;
   }
-}
 
-body {
-  color: var(--foreground);
-  background: var(--background);
-  font-family: Arial, Helvetica, sans-serif;
+  /* login page design ended here */
 }
