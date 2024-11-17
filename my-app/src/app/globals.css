@@ -2,14 +2,48 @@
 @tailwind components;
 @tailwind utilities;
 
+body {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
 @layer components {
   /* common design start here */
   /* common desing ended here */
 
   /* login page design start here */
+  .login-image-wrapper {
+    @apply w-[380.312px] h-[631.141px] bg-red-500 ml-[32px] mr-3 ;
+  }
   .login-form {
-    @apply items-center border bg-white rounded-[1px] border-solid border-gray flex flex-col h-auto w-80;
+    @apply items-center border bg-white rounded-[1px] border-solid border-gray flex flex-col h-auto w-[350px];
+  }
+
+  .login-input {
+    @apply w-[268px] h-[38px] border border-solid border-gray pt-2.5 pb-1.5 pl-2 focus:outline-none;
+  }
+
+  .login-button {
+    @apply w-[268px] h-[38px] bg-customBlue  rounded-md text-white font-bold text-[13px];
+  }
+
+  .login-border-bar {
+    @apply w-[104px] h-[1px] bg-gray;
+  }
+  .forgot-box {
+    @apply items-center border bg-white rounded-[1px] border-solid border-gray flex  h-auto w-[350px] py-5 justify-center gap-x-1;
   }
 
   /* login page design ended here */
+
+  /* Footer design started here */
+  .footer-common-txt {
+    @apply text-secondary_gray text-[14px];
+  }
+  /* Footer design ended here */
 }
