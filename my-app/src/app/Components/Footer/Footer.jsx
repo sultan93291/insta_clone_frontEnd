@@ -19,7 +19,7 @@ const Footer = () => {
   ];
 
   return (
-    <div className="flex flex-col items-center gap-y-5 ">
+    <div className="flex flex-col items-center gap-y-3 ">
       <div className="flex gap-x-2">
         {FooterLinkTxt.map((text, index) => {
           return (

@@ -12,7 +12,11 @@ module.exports = {
         customBlue: "#53bdeb",
         secondary_gray: "rgba(115,115,115,1)",
         secondary_blue: "#385185",
-        meduim_blue:"rgba(0,55,107,1)"
+        heading_gray: "#737373",
+        meduim_blue: "rgba(0,55,107,1)",
+        dark_blue: "#0095f6",
+        link_blue: "#00376b",
+        secondary_black:"#262626"
       },
     },
   },

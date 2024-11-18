@@ -1,4 +1,4 @@
-"use client"
+"use client";
 import Image from "next/image";
 import Input from "./Components/Tags/Input/Input";
 import Button from "./Components/Tags/Button/Button";
@@ -7,11 +7,18 @@ import Heading from "./Components/Tags/Heading/Heading";
 import { RiFacebookBoxFill } from "react-icons/ri";
 import Footer from "./Components/Footer/Footer";
 import { useRouter } from "next/navigation";
+import { useState } from "react";
 
 export default function Home() {
+  const [Show, setShow] = useState(false);
+
   const router = useRouter();
   const handleSignup = () => {
     router.push("/signup");
+  };
+
+  const handleShow = () => {
+    setShow(!Show);
   };
 
   return (
@@ -23,20 +30,30 @@ export default function Home() {
               src="/insta.png" // Use the correct path for your image
               alt="Instagram Logo"
               width={175}
-              height={175}
+              height={51}
+              className=" my-12 h-[51px] w-[175px] bg-center bg-no-repeat bg-cover "
             />
             <div className="flex flex-col items-center justify-center gap-y-5 ">
-              <div className="flex flex-col items-center justify-center gap-y-2">
+              <div className="flex flex-col items-center justify-center gap-y-1.5">
                 <Input
                   type={"text"}
                   placeholder={"username or email"}
                   className={"login-input"}
                 />
-                <Input
-                  type={"text"}
-                  placeholder={"password"}
-                  className={"login-input"}
-                />
+                <div className="relative ">
+                  <Input
+                    type={Show ? "text" : "password"}
+                    placeholder={"password"}
+                    className={"login-input pr-14 "}
+                  />
+                  <span
+                    className="absolute ml-[-50px] mt-2 text-sm text-secondary_black font-semibold cursor-pointer hover:text-heading_gray "
+                    onClick={handleShow}
+                  >
+                    {" "}
+                    {Show ? "Hide" : "Show"}{" "}
+                  </span>
+                </div>
               </div>
               <Button text={"Log In"} className={"login-button"} />
             </div>
