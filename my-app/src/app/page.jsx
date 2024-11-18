@@ -7,27 +7,72 @@ import Heading from "./Components/Tags/Heading/Heading";
 import { RiFacebookBoxFill } from "react-icons/ri";
 import Footer from "./Components/Footer/Footer";
 import { useRouter } from "next/navigation";
-import { useState } from "react";
+import { use, useState } from "react";
+import { FastField, useFormik } from "formik";
+import axios from "axios";
 
 export default function Home() {
   const [Show, setShow] = useState(false);
+  const [isPass, setisPass] = useState(false);
 
   const router = useRouter();
   const handleSignup = () => {
     router.push("/signup");
   };
 
+  const handlePassBtn = e => {
+    if (e.target.value.length > 0) {
+      setisPass(true);
+    } else {
+      setisPass(false);
+    }
+  };
+
   const handleShow = () => {
     setShow(!Show);
   };
+
+  const initialValues = {
+    email: "",
+    password: "",
+  };
+
+  const formik = useFormik({
+    initialValues: initialValues,
+    onSubmit: (values, actions) => {
+      console.log(values);
+
+      axios({
+        method: "post",
+        url: "https://insta-clone-backend-i0e4.onrender.com/api/v1.0.0/insta/login",
+        data: values,
+        headers: {
+          "Content-Type": "application/json",
+        },
+      })
+        .then(res => {
+          setisPass(false)
+          actions.resetForm({
+            values: initialValues,
+          });
+          if (res.status === 200) {
+            console.log("successfully logged in");
+          }
+          console.log(res);
+        })
+        .catch(err => {
+          console.log(err);
+        });
+    },
+  });
 
   return (
     <div className="relative w-screen h-screen">
       <div className="flex items-center justify-center h-[85%] gap-x-12  ">
         <div className="flex flex-col gap-y-4 ">
-          <form className="login-form">
+          <form className="login-form" onSubmit={formik.handleSubmit}>
             <Image
-              src="/insta.png" // Use the correct path for your image
+              src="/insta.png"
               alt="Instagram Logo"
               width={175}
               height={51}
@@ -39,23 +84,37 @@ export default function Home() {
                   type={"text"}
                   placeholder={"username or email"}
                   className={"login-input"}
+                  name={"email"}
+                  onChange={formik.handleChange}
+                  value={formik.values.email}
                 />
                 <div className="relative ">
                   <Input
                     type={Show ? "text" : "password"}
                     placeholder={"password"}
                     className={"login-input pr-14 "}
+                    name={"password"}
+                    onChange={e => {
+                      handlePassBtn(e), formik.handleChange(e);
+                    }}
+                    value={formik.values.password}
                   />
-                  <span
-                    className="absolute ml-[-50px] mt-2 text-sm text-secondary_black font-semibold cursor-pointer hover:text-heading_gray "
-                    onClick={handleShow}
-                  >
-                    {" "}
-                    {Show ? "Hide" : "Show"}{" "}
-                  </span>
+                  {isPass && (
+                    <span
+                      className="absolute ml-[-50px] mt-2 text-sm text-secondary_black font-semibold cursor-pointer hover:text-heading_gray "
+                      onClick={handleShow}
+                    >
+                      {" "}
+                      {Show ? "Hide" : "Show"}{" "}
+                    </span>
+                  )}
                 </div>
               </div>
-              <Button text={"Log In"} className={"login-button"} />
+              <Button
+                disabled={!formik.values.email || !formik.values.password}
+                text={"Log In"}
+                className={"login-button"}
+              />
             </div>
             <div className="my-5">
               <div className="flex items-center gap-x-5 ">
