@@ -27,11 +27,14 @@ export default function Home() {
     const interval = setInterval(() => {
       setIsFading(true);
       setTimeout(() => {
-        setCurrentIndex(prevIndex => (prevIndex + 1) % images.length);
+        if (currentIndex === 4) {
+          setCurrentIndex(0);
+        } else {
+          setCurrentIndex(prevIndex => (prevIndex + 1) % images.length);
+        }
         setIsFading(false);
       }, 1700);
     }, 6000);
-
     return () => clearInterval(interval);
   }, [images.length]);
 
@@ -97,7 +100,9 @@ export default function Home() {
             className={` absolute top-0 left-0 w-[248px] h-[520.83px] bg-center bg-no-repeat bg-contain ml-[145px] mt-[22px]  transition-opacity duration-[2000ms] ease-in-out ${
               isFading ? "opacity-0" : "opacity-100"
             }`}
-            style={{ backgroundImage: `url(${images[currentIndex]})` }}
+            style={{
+              backgroundImage: `url(${images[currentIndex]})`,
+            }}
           ></div>
         </div>
 
