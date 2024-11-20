@@ -7,13 +7,33 @@ import Heading from "./Components/Tags/Heading/Heading";
 import { RiFacebookBoxFill } from "react-icons/ri";
 import Footer from "./Components/Footer/Footer";
 import { useRouter } from "next/navigation";
-import { use, useState } from "react";
+import { useState, useEffect } from "react";
 import { FastField, useFormik } from "formik";
 import axios from "axios";
 
 export default function Home() {
+  const images = [
+    "/women_cat.png",
+    "/message.png",
+    "/profile.png",
+    "/reels.png",
+  ];
   const [Show, setShow] = useState(false);
   const [isPass, setisPass] = useState(false);
+  const [currentIndex, setCurrentIndex] = useState(0);
+  const [isFading, setIsFading] = useState(false);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setIsFading(true);
+      setTimeout(() => {
+        setCurrentIndex(prevIndex => (prevIndex + 1) % images.length);
+        setIsFading(false);
+      }, 1700);
+    }, 6000);
+
+    return () => clearInterval(interval);
+  }, [images.length]);
 
   const router = useRouter();
   const handleSignup = () => {
@@ -51,7 +71,7 @@ export default function Home() {
         },
       })
         .then(res => {
-          setisPass(false)
+          setisPass(false);
           actions.resetForm({
             values: initialValues,
           });
@@ -68,7 +88,19 @@ export default function Home() {
 
   return (
     <div className="relative w-screen h-screen">
-      <div className="flex items-center justify-center h-[85%] gap-x-12  ">
+      <div className="flex items-center justify-center h-[85%]   ">
+        <div
+          className="relative h-[611px] w-[445px] bg-cover bg-center bg-no-repeat"
+          style={{ backgroundImage: 'url("/insta_home.png")' }}
+        >
+          <div
+            className={` absolute top-0 left-0 w-[248px] h-[520.83px] bg-center bg-no-repeat bg-contain ml-[145px] mt-[22px]  transition-opacity duration-[2000ms] ease-in-out ${
+              isFading ? "opacity-0" : "opacity-100"
+            }`}
+            style={{ backgroundImage: `url(${images[currentIndex]})` }}
+          ></div>
+        </div>
+
         <div className="flex flex-col gap-y-4 ">
           <form className="login-form" onSubmit={formik.handleSubmit}>
             <Image
