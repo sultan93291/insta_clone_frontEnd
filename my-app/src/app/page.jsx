@@ -27,7 +27,7 @@ export default function Home() {
     const interval = setInterval(() => {
       setIsFading(true);
       setTimeout(() => {
-        if (currentIndex === 4) {
+        if (currentIndex === images.length-1) {
           setCurrentIndex(0);
         } else {
           setCurrentIndex(prevIndex => (prevIndex + 1) % images.length);
