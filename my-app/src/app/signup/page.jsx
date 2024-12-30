@@ -11,18 +11,18 @@ import { useState } from "react";
 import { useFormik } from "formik";
 import axios from "axios";
 
-
-const page = () => {
+const Page = () => {
   const [Show, setShow] = useState(false);
   const [isPass, setisPass] = useState(false);
 
   const router = useRouter();
+
   const handleSignup = () => {
-    router.push("/");
+    router.push("/"); // Redirect to the homepage after successful signup
   };
 
   const handleShow = () => {
-    setShow(!Show);
+    setShow(!Show); // Toggle password visibility
   };
 
   const handlePassBtn = e => {
@@ -43,6 +43,7 @@ const page = () => {
   const formik = useFormik({
     initialValues: initialValues,
     onSubmit: (values, actions) => {
+      // Make API request to signup
       axios({
         method: "post",
         url: "https://insta-clone-backend-i0e4.onrender.com/api/v1.0.0/insta/signup",
@@ -57,7 +58,7 @@ const page = () => {
             values: initialValues,
           });
           if (res.status === 200) {
-            console.log("successfully  registered");
+            console.log("Successfully registered");
           }
           console.log(res);
         })
@@ -68,9 +69,9 @@ const page = () => {
   });
 
   return (
-    <div className="relative flex flex-col w-screen h-screen justify-evenly ">
-      <div className="flex  justify-center h-[90%] gap-x-12 ">
-        <div className="flex flex-col gap-y-3 ">
+    <div className="relative flex flex-col w-screen h-screen justify-evenly">
+      <div className="flex justify-center h-[90%] gap-x-12">
+        <div className="flex flex-col gap-y-3">
           <form onSubmit={formik.handleSubmit} className="login-form">
             <div className="flex flex-col items-center mt-10 gap-y-5">
               <Image
@@ -78,29 +79,27 @@ const page = () => {
                 alt="Instagram Logo"
                 width={175}
                 height={51}
-                className=" h-[51px] w-[175px] bg-center bg-no-repeat bg-cover "
+                className="h-[51px] w-[175px] bg-center bg-no-repeat bg-cover"
               />
               <Heading
                 text={"Sign up to see photos and videos from your friends."}
                 Variant={"h4"}
-                className={" signup-heading"}
+                className={"signup-heading"}
               />
               <Button
                 text={
                   <>
-                    {
-                      <RiFacebookBoxFill className="mr-2 text-2xl text-white " />
-                    }
+                    <RiFacebookBoxFill className="mr-2 text-2xl text-white" />
                     Log in with Facebook
                   </>
                 }
                 className={
-                  "login-button mb-2.5 bg-dark_blue flex items-center justify-center text-center text-sm "
+                  "login-button mb-2.5 bg-dark_blue flex items-center justify-center text-center text-sm"
                 }
               />
             </div>
-            <div className="flex flex-col items-center justify-center gap-y-5 ">
-              <div className="flex items-center gap-x-5 ">
+            <div className="flex flex-col items-center justify-center gap-y-5">
+              <div className="flex items-center gap-x-5">
                 <span className="login-border-bar"></span>
                 <Paragraph
                   text={"OR"}
@@ -117,11 +116,11 @@ const page = () => {
                   onChange={formik.handleChange}
                   value={formik.values.email}
                 />
-                <div className="relative ">
+                <div className="relative">
                   <Input
                     type={Show ? "text" : "password"}
-                    placeholder={"password"}
-                    className={"login-input pr-14 "}
+                    placeholder={"Password"}
+                    className={"login-input pr-14"}
                     name={"password"}
                     onChange={e => {
                       handlePassBtn(e), formik.handleChange(e);
@@ -130,11 +129,10 @@ const page = () => {
                   />
                   {isPass && (
                     <span
-                      className="absolute ml-[-50px] mt-2 text-sm text-secondary_black font-semibold cursor-pointer hover:text-heading_gray "
+                      className="absolute ml-[-50px] mt-2 text-sm text-secondary_black font-semibold cursor-pointer hover:text-heading_gray"
                       onClick={handleShow}
                     >
-                      {" "}
-                      {Show ? "Hide" : "Show"}{" "}
+                      {Show ? "Hide" : "Show"}
                     </span>
                   )}
                 </div>
@@ -158,7 +156,7 @@ const page = () => {
               <div className="flex flex-col items-center gap-y-4">
                 <Paragraph
                   className={
-                    "w-[258px] text-xs text-center text-heading_gray font-normal "
+                    "w-[258px] text-xs text-center text-heading_gray font-normal"
                   }
                   text={
                     <>
@@ -173,7 +171,7 @@ const page = () => {
                 />
                 <Paragraph
                   className={
-                    "w-[258px] text-xs text-center text-heading_gray font-normal "
+                    "w-[258px] text-xs text-center text-heading_gray font-normal"
                   }
                   text={
                     <>
@@ -228,14 +226,14 @@ const page = () => {
                 width={134}
                 height={40}
                 alt="not found"
-                className="cursor-pointer "
+                className="cursor-pointer"
               />
               <Image
                 src={"/micro.png"}
                 width={111}
                 height={40}
                 alt="not found"
-                className="cursor-pointer "
+                className="cursor-pointer"
               />
             </div>
           </div>
@@ -246,4 +244,4 @@ const page = () => {
   );
 };
 
-export default page;
+export default Page;

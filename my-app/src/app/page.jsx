@@ -8,7 +8,7 @@ import { RiFacebookBoxFill } from "react-icons/ri";
 import Footer from "./Components/Footer/Footer";
 import { useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
-import { FastField, useFormik } from "formik";
+import { useFormik } from "formik";
 import axios from "axios";
 
 export default function Home() {
@@ -22,21 +22,22 @@ export default function Home() {
   const [isPass, setisPass] = useState(false);
   const [currentIndex, setCurrentIndex] = useState(0);
   const [isFading, setIsFading] = useState(false);
+  const [isMounted, setIsMounted] = useState(false);
+
+  useEffect(() => {
+    setIsMounted(true); // Prevents hydration mismatch
+  }, []);
 
   useEffect(() => {
     const interval = setInterval(() => {
       setIsFading(true);
       setTimeout(() => {
-        if (currentIndex === images.length-1) {
-          setCurrentIndex(0);
-        } else {
-          setCurrentIndex(prevIndex => (prevIndex + 1) % images.length);
-        }
+        setCurrentIndex(prevIndex => (prevIndex + 1) % images.length);
         setIsFading(false);
       }, 1700);
     }, 6000);
     return () => clearInterval(interval);
-  }, [images.length]);
+  }, []);
 
   const router = useRouter();
   const handleSignup = () => {
@@ -63,8 +64,6 @@ export default function Home() {
   const formik = useFormik({
     initialValues: initialValues,
     onSubmit: (values, actions) => {
-      console.log(values);
-
       axios({
         method: "post",
         url: "https://insta-clone-backend-i0e4.onrender.com/api/v1.0.0/insta/login",
@@ -75,13 +74,10 @@ export default function Home() {
       })
         .then(res => {
           setisPass(false);
-          actions.resetForm({
-            values: initialValues,
-          });
+          actions.resetForm({ values: initialValues });
           if (res.status === 200) {
             console.log("successfully logged in");
           }
-          console.log(res);
         })
         .catch(err => {
           console.log(err);
@@ -89,15 +85,17 @@ export default function Home() {
     },
   });
 
+  if (!isMounted) return null; // Ensure rendering happens only on the client
+
   return (
     <div className="relative w-screen h-screen">
-      <div className="flex items-center justify-center h-[85%]   ">
+      <div className="flex items-center justify-center h-[85%]">
         <div
           className="relative h-[611px] w-[445px] bg-cover bg-center bg-no-repeat"
           style={{ backgroundImage: 'url("/insta_home.png")' }}
         >
           <div
-            className={` absolute top-0 left-0 w-[248px] h-[520.83px] bg-center bg-no-repeat bg-contain ml-[145px] mt-[22px]  transition-opacity duration-[2000ms] ease-in-out ${
+            className={`absolute top-0 left-0 w-[248px] h-[520.83px] bg-center bg-no-repeat bg-contain ml-[145px] mt-[22px] transition-opacity duration-[2000ms] ease-in-out ${
               isFading ? "opacity-0" : "opacity-100"
             }`}
             style={{
@@ -106,16 +104,16 @@ export default function Home() {
           ></div>
         </div>
 
-        <div className="flex flex-col gap-y-4 ">
+        <div className="flex flex-col gap-y-4">
           <form className="login-form" onSubmit={formik.handleSubmit}>
             <Image
               src="/insta.png"
               alt="Instagram Logo"
               width={175}
               height={51}
-              className=" my-12 h-[51px] w-[175px] bg-center bg-no-repeat bg-cover "
+              className="my-12 h-[51px] w-[175px] bg-center bg-no-repeat bg-cover"
             />
-            <div className="flex flex-col items-center justify-center gap-y-5 ">
+            <div className="flex flex-col items-center justify-center gap-y-5">
               <div className="flex flex-col items-center justify-center gap-y-1.5">
                 <Input
                   type={"text"}
@@ -125,24 +123,24 @@ export default function Home() {
                   onChange={formik.handleChange}
                   value={formik.values.email}
                 />
-                <div className="relative ">
+                <div className="relative">
                   <Input
                     type={Show ? "text" : "password"}
                     placeholder={"password"}
-                    className={"login-input pr-14 "}
+                    className={"login-input pr-14"}
                     name={"password"}
                     onChange={e => {
-                      handlePassBtn(e), formik.handleChange(e);
+                      handlePassBtn(e);
+                      formik.handleChange(e);
                     }}
                     value={formik.values.password}
                   />
                   {isPass && (
                     <span
-                      className="absolute ml-[-50px] mt-2 text-sm text-secondary_black font-semibold cursor-pointer hover:text-heading_gray "
+                      className="absolute ml-[-50px] mt-2 text-sm text-secondary_black font-semibold cursor-pointer hover:text-heading_gray"
                       onClick={handleShow}
                     >
-                      {" "}
-                      {Show ? "Hide" : "Show"}{" "}
+                      {Show ? "Hide" : "Show"}
                     </span>
                   )}
                 </div>
@@ -154,7 +152,7 @@ export default function Home() {
               />
             </div>
             <div className="my-5">
-              <div className="flex items-center gap-x-5 ">
+              <div className="flex items-center gap-x-5">
                 <span className="login-border-bar"></span>
                 <Paragraph
                   text={"OR"}
@@ -162,20 +160,20 @@ export default function Home() {
                 />
                 <span className="login-border-bar"></span>
               </div>
-              <div className="flex flex-col items-center mt-[30px] gap-y-3 ">
-                <div className="flex items-center cursor-pointer gap-x-2 ">
-                  <RiFacebookBoxFill className="text-xl text-secondary_blue " />
+              <div className="flex flex-col items-center mt-[30px] gap-y-3">
+                <div className="flex items-center cursor-pointer gap-x-2">
+                  <RiFacebookBoxFill className="text-xl text-secondary_blue" />
                   <Heading
                     Variant={"h4"}
-                    text={"Log in with facebook"}
-                    className={" text-secondary_blue font-medium text-[14px] "}
+                    text={"Log in with Facebook"}
+                    className={"text-secondary_blue font-medium text-[14px]"}
                   />
                 </div>
                 <Heading
                   Variant={"h4"}
                   text={"Forgot password ?"}
                   className={
-                    "text-[14px] font-normal text-meduim_blue cursor-pointer "
+                    "text-[14px] font-normal text-medium_blue cursor-pointer"
                   }
                 />
               </div>
@@ -189,7 +187,7 @@ export default function Home() {
             />
             <Heading
               Variant={"h4"}
-              text={"sign up"}
+              text={"Sign Up"}
               className={"text-[14px] text-customBlue font-bold cursor-pointer"}
               onClick={handleSignup}
             />
@@ -206,14 +204,14 @@ export default function Home() {
                 width={134}
                 height={40}
                 alt="not found"
-                className="cursor-pointer "
+                className="cursor-pointer"
               />
               <Image
                 src={"/micro.png"}
                 width={111}
                 height={40}
                 alt="not found"
-                className="cursor-pointer "
+                className="cursor-pointer"
               />
             </div>
           </div>
@@ -223,3 +221,4 @@ export default function Home() {
     </div>
   );
 }
+
